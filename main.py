@@ -73,12 +73,10 @@ def visualize_data(data):
 def main():
     st.set_page_config(page_title="AI Market Research Bot", layout="wide")
     
-    # Custom CSS for modern UI
+    # Custom CSS for modern UI with dark/light mode toggle
     st.markdown("""
         <style>
         .stApp {
-            background-color: #121212;
-            color: #ffffff;
             font-family: 'Arial', sans-serif;
         }
         .stButton>button {
@@ -92,30 +90,22 @@ def main():
         .stButton>button:hover {
             background-color: #1565c0;
         }
-        .stTextInput>div>div>input {
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 18px;
-            background-color: #2c2c2c;
-            color: white;
-            border: 1px solid #444;
+        .light-mode {
+            background-color: #ffffff;
+            color: #000000;
         }
-        .stMarkdown h1 {
-            text-align: center;
-            color: #1e88e5;
-        }
-        .stCard {
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .stMarkdown h2 {
-            color: #e3f2fd;
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
         }
         </style>
     """, unsafe_allow_html=True)
     
+    # Toggle dark/light mode
+    mode = st.sidebar.radio("Choose Theme", ["Light", "Dark"])
+    theme_class = "light-mode" if mode == "Light" else "dark-mode"
+    
+    st.markdown(f'<div class="{theme_class}">', unsafe_allow_html=True)
     st.title("🔍 AI Market Research Bot")
     st.markdown("## Easily analyze market competition using AI-powered insights.")
     
@@ -136,7 +126,7 @@ def main():
                 save_results(data, summary)
             
             st.markdown("## 📊 AI Competitive Analysis Report", unsafe_allow_html=True)
-            st.markdown(f"<div class='stCard'>{summary}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='{theme_class}'>" + summary + "</div>", unsafe_allow_html=True)
             
             df = pd.DataFrame(data)
             st.markdown("### 📌 Competitor Data")
@@ -153,6 +143,7 @@ def main():
             )
         else:
             st.warning("⚠️ No results found. Try a different search term.")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
