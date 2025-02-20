@@ -5,6 +5,7 @@ import json
 import streamlit as st
 import matplotlib.pyplot as plt
 import os
+import time
 
 def get_search_results(query, num_results=5):
     """Fetches Google search results using SerpAPI."""
@@ -76,53 +77,69 @@ def main():
     st.markdown("""
         <style>
         .stApp {
-            background-color: #f8f9fa;
-            color: #333;
-            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
         }
         .stButton>button {
-            background-color: #007bff;
+            background-color: #1e88e5;
             color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .stButton>button:hover {
+            background-color: #1565c0;
         }
         .stTextInput>div>div>input {
             border-radius: 10px;
-            padding: 10px;
-            font-size: 16px;
+            padding: 12px;
+            font-size: 18px;
+            background-color: #2c2c2c;
+            color: white;
+            border: 1px solid #444;
         }
         .stMarkdown h1 {
             text-align: center;
-            color: #007bff;
+            color: #1e88e5;
+        }
+        .stCard {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .stMarkdown h2 {
+            color: #e3f2fd;
         }
         </style>
-    
     """, unsafe_allow_html=True)
     
     st.title("🔍 AI Market Research Bot")
     st.markdown("## Easily analyze market competition using AI-powered insights.")
     
-    query = st.text_input("### Enter a keyword or phrase for competitive analysis:")
-    col1, col2 = st.columns([3,1])
-    
-    with col2:
+    with st.container():
+        st.markdown("### 🔎 Enter a keyword for analysis")
+        query = st.text_input("Keyword:")
         analyze_button = st.button("🚀 Analyze")
     
     if analyze_button and query:
-        st.info("🔎 Searching for competitors...")
-        data = get_search_results(query)
+        with st.spinner("🔎 Searching for competitors..."):
+            time.sleep(2)
+            data = get_search_results(query)
         
         if data:
-            st.success("✅ Generating AI report...")
-            summary = summarize_data(data)
-            save_results(data, summary)
+            with st.spinner("✅ Generating AI report..."):
+                time.sleep(2)
+                summary = summarize_data(data)
+                save_results(data, summary)
             
-            st.subheader("📊 AI Competitive Analysis Report")
-            st.write(summary)
+            st.markdown("## 📊 AI Competitive Analysis Report", unsafe_allow_html=True)
+            st.markdown(f"<div class='stCard'>{summary}</div>", unsafe_allow_html=True)
             
             df = pd.DataFrame(data)
-            st.write("### 📌 Competitor Data:")
+            st.markdown("### 📌 Competitor Data")
             st.dataframe(df, use_container_width=True)
             
             visualize_data(data)
