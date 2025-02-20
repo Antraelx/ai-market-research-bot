@@ -73,7 +73,7 @@ def visualize_data(data):
 def main():
     st.set_page_config(page_title="AI Market Research Bot", layout="wide")
     
-    # Custom CSS for modern UI with dark/light mode toggle
+    # Custom CSS for modern UI with dark/light mode toggle and animations
     st.markdown("""
         <style>
         .stApp {
@@ -85,10 +85,11 @@ def main():
             padding: 12px 24px;
             border-radius: 8px;
             font-size: 18px;
-            transition: 0.3s;
+            transition: 0.3s ease-in-out;
         }
         .stButton>button:hover {
             background-color: #1565c0;
+            transform: scale(1.05);
         }
         .light-mode {
             background-color: #ffffff;
@@ -97,6 +98,14 @@ def main():
         .dark-mode {
             background-color: #121212;
             color: #ffffff;
+            transition: all 0.5s ease-in-out;
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         </style>
     """, unsafe_allow_html=True)
@@ -105,7 +114,7 @@ def main():
     mode = st.sidebar.radio("Choose Theme", ["Light", "Dark"])
     theme_class = "light-mode" if mode == "Light" else "dark-mode"
     
-    st.markdown(f'<div class="{theme_class}">', unsafe_allow_html=True)
+    st.markdown(f'<div class="{theme_class} fade-in">', unsafe_allow_html=True)
     st.title("🔍 AI Market Research Bot")
     st.markdown("## Easily analyze market competition using AI-powered insights.")
     
@@ -126,11 +135,11 @@ def main():
                 save_results(data, summary)
             
             st.markdown("## 📊 AI Competitive Analysis Report", unsafe_allow_html=True)
-            st.markdown(f"<div class='{theme_class}'>" + summary + "</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='{theme_class} fade-in'>" + summary + "</div>", unsafe_allow_html=True)
             
             df = pd.DataFrame(data)
             st.markdown("### 📌 Competitor Data")
-            st.dataframe(df, use_container_width=True)
+            st.dataframe(df.style.set_properties(**{'background-color': '#1e1e1e', 'color': 'white'}), use_container_width=True)
             
             visualize_data(data)
             
