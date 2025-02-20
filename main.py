@@ -71,6 +71,35 @@ def visualize_data(data):
 
 def main():
     st.set_page_config(page_title="AI Market Research Bot", layout="wide")
+    
+    # Custom CSS for modern UI
+    st.markdown("""
+        <style>
+        .stApp {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+        .stButton>button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .stTextInput>div>div>input {
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .stMarkdown h1 {
+            text-align: center;
+            color: #007bff;
+        }
+        </style>
+    
+    """, unsafe_allow_html=True)
+    
     st.title("🔍 AI Market Research Bot")
     st.markdown("## Easily analyze market competition using AI-powered insights.")
     
