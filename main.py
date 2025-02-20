@@ -42,12 +42,12 @@ def summarize_data(data):
     prompt = f"Perform a competitive analysis based on these results: {content}"
     
     try:
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model="gpt-4-turbo",
             messages=[{"role": "system", "content": "You are an AI specializing in competitive analysis."},
                       {"role": "user", "content": prompt}]
         )
-        return response.choices[0].message['content']
+        return response.choices[0].message.content
     except Exception as e:
         return f"Error generating AI summary: {e}"
 
@@ -107,6 +107,15 @@ def main():
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        .custom-table th, .custom-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .custom-table th {
+            background-color: #1e1e1e;
+            color: white;
+        }
         </style>
     """, unsafe_allow_html=True)
     
@@ -135,11 +144,11 @@ def main():
                 save_results(data, summary)
             
             st.markdown("## 📊 AI Competitive Analysis Report", unsafe_allow_html=True)
-            st.markdown(f"<div class='{theme_class} fade-in'>" + summary + "</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='{theme_class} fade-in'>{summary}</div>", unsafe_allow_html=True)
             
             df = pd.DataFrame(data)
             st.markdown("### 📌 Competitor Data")
-            st.dataframe(df.style.set_properties(**{'background-color': '#1e1e1e', 'color': 'white'}), use_container_width=True)
+            st.table(df)
             
             visualize_data(data)
             
